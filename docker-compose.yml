@@ -1,0 +1,12 @@
+services:
+  apache:
+    image: httpd:latest
+    container_name: apache
+  php:
+    image: php:8.2.11-fpm
+    container_name: php
+  mail:
+    build:
+      context: mail
+    container_name: mail-server
+
