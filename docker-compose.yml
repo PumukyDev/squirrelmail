@@ -9,4 +9,3 @@ services:
     build:
       context: mail
     container_name: mail-server
-
