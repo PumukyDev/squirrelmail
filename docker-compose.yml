@@ -26,7 +26,7 @@ services:
   mail:
     build:
       context: mail
-    container_name: mail-server
+    container_name: mail
     ports:
       - "25:25"
       - "143:143"

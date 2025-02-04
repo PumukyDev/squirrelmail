@@ -3,6 +3,10 @@ FROM php:7.3-fpm
 
 COPY php.ini /usr/local/etc/php/php.ini
 
+RUN mkdir -p /var/local/squirrelmail/data && \
+    chown -R www-data:www-data /var/local/squirrelmail/data && \
+    chmod -R 770 /var/local/squirrelmail/data
+
 # Install required PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql
 
