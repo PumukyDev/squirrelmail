@@ -6,6 +6,46 @@ image::assets/squirrelmail.png[alt=SquirrelMail logo,width=300, align="center"]
 
 SquirrelMail is a webmail client that allows users to access their email via a web interface. This documentation describes how to deploy SquirrelMail using Docker with separate containers for the application, web server, and mail server.
 
+== Squema
+
+Look at this mermaid squema
+
+[mermaid]
+----
+flowchart TD
+
+    subgraph Docker
+        subgraph Nginx["Nginx (Container)"]
+            SquirrelMail["SquirrelMail (Mail client)"]
+        end
+
+        PHP["PHP (Backend)"]
+
+    subgraph Mail["Mail (Container)"]
+        direction LR
+        subgraph Postfix
+            Fulano["Fulano (User)"]
+            Mengano["Mengano (User)"]
+        end
+        Dovecot["Dovecot (IMAP Server)"]
+    end
+
+    end
+
+    subgraph Browser
+        FulanoBrowser["Fulano (Browser)"]
+        MenganoBrowser["Mengano (Browser)"]
+    end
+
+    PHP --> Nginx
+
+    Nginx -->|Port 80 HTTP| FulanoBrowser
+    Nginx -->|Port 80 HTTP| MenganoBrowser
+    FulanoBrowser --> SquirrelMail
+    MenganoBrowser --> SquirrelMail
+    Dovecot -->|Port 143 IMAP| Postfix
+    Postfix -->|Port 25 SMTP| Dovecot
+----
 == Setup Instructions
 
 *Clone the Repository*
@@ -22,3 +62,5 @@ SquirrelMail is a webmail client that allows users to access their email via a w
 ----
     docker-compose up -d --build
 ----
+
+== Documentation
