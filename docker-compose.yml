@@ -6,8 +6,6 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./src:/var/www/html
-    ports:
-      - "9000:9000"
     working_dir: /var/www/html
     networks:
       - mail-network
@@ -27,11 +25,6 @@ services:
     build:
       context: mail
     container_name: mail
-    ports:
-      - "25:25"
-      - "143:143"
-      - "587:587"
-      - "993:993"
     networks:
       - mail-network
 
