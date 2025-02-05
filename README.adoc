@@ -1,0 +1,24 @@
+= Mail Server with SquirrelMail
+
+image::assets/squirrelmail.png[alt=SquirrelMail logo,width=300, align="center"]
+
+== Introduction
+
+SquirrelMail is a webmail client that allows users to access their email via a web interface. This documentation describes how to deploy SquirrelMail using Docker with separate containers for the application, web server, and mail server.
+
+== Setup Instructions
+
+*Clone the Repository*
+
+[source,bash]
+----
+   git clone https://github.com/PumukyDev/squirrelmail.git
+   cd squirrelmail
+----
+
+*Deploy the servers*
+
+[source,bash]
+----
+    docker-compose up -d --build
+----
