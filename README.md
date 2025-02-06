@@ -1,17 +1,16 @@
-= Mail Server with SquirrelMail
+# Mail Server with SquirrelMail
 
-image::assets/squirrelmail.png[alt=SquirrelMail logo,width=300, align="center"]
+![SquirrelMail logo](./assets/squirrelmail.png)
 
-== Introduction
+## Introduction
 
 SquirrelMail is a webmail client that allows users to access their email via a web interface. This documentation describes how to deploy SquirrelMail using Docker with separate containers for the application, web server, and mail server.
 
-== Squema
+## Squema
 
 Look at this mermaid squema
 
-[mermaid]
-----
+```mermaid
 flowchart TD
 
     subgraph Docker
@@ -45,22 +44,21 @@ flowchart TD
     MenganoBrowser --> SquirrelMail
     Dovecot -->|Port 143 IMAP| Postfix
     Postfix -->|Port 25 SMTP| Dovecot
-----
-== Setup Instructions
+```
 
-*Clone the Repository*
+## Setup Instructions
 
-[source,bash]
-----
+### Clone the Repository
+
+```bash
    git clone https://github.com/PumukyDev/squirrelmail.git
    cd squirrelmail
-----
+```
 
-*Deploy the servers*
+### Deploy the servers
 
-[source,bash]
-----
+```bash
     docker-compose up -d --build
-----
+```
 
-== Documentation
+## Documentation
