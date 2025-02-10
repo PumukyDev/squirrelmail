@@ -44,6 +44,12 @@ flowchart TD
     MenganoBrowser --> SquirrelMail
     Dovecot -->|Port 143 IMAP| Postfix
     Postfix -->|Port 25 SMTP| Dovecot
+
+    style Docker fill:transparent
+    style Mail fill:transparent
+    style Browser fill:transparent
+    style Nginx fill:transparent
+    style Postfix fill:transparent
 ```
 
 ## Setup Instructions

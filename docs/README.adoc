@@ -1,2 +1,89 @@
 = Mail Server Configuration
 
+== Postfix
+
+=== Ports
+
+Postfix starts the SMTP service (port 25/TCP)
+
+=== Configuration
+
+The main configuration file for Postfix is /etc/postfix/main.cf
+
+=== User Types
+
+In Postfix, users can be local (users with an account on the machine) or virtual 
+(users whose credentials are stored in files, databases, directory services, etc.).
+
+=== Mailboxes
+
+Two main mailbox formats exist: **mbox** and **maildir**.
+
+==== mbox
+- All messages are stored in a single file per user.
+- Requires file locking to prevent corruption during simultaneous access.
+- Commonly used in UNIX systems with inbox files at /var/mail/username or /var/spool/mail/username.
+- In Postfix, the default inbox is set by mail_spool_directory=/var/mail.
+- Local mail reading moves messages from the inbox to a mailbox file in $HOME.
+- To store messages directly in $HOME, set home_mailbox=filename.
+
+==== maildir
+- Each message is stored in a separate file with a unique name, avoiding the need for file locking.
+- The mailbox is a directory (usually Maildir) with three subdirectories:
+  * tmp: pending messages
+  * new: new messages
+  * cur: read messages
+- To use maildir in Postfix, set home_mailbox=Maildir/ (note the trailing slash).
+- Messages are stored in $HOME/Maildir/new, and read messages in $HOME/Maildir/cur.
+
+
+== Dovecot
+
+So far, we have accessed user mailboxes by logging into the same server locally, but this is not common practice. Typically, users access their messages remotely from their workstations using a POP/IMAP server for delivery.
+
+=== Ports
+
+TCP/110 (POP), TCP/143 (IMAP)
+
+=== Mailboxes
+
+By default, mbox-type mailboxes are set with the inbox located in /var/mail/username. It is suggested that when the client reads messages, they are organized within a folder in the user's $HOME named mail, but this depends on the client application, which may organize the read messages in a different location. This default configuration is set with the parameter mail_location.
+
+Default configuration for mbox mailboxes:
+mail_location = mbox:~/mail:INBOX=/var/mail/%u
+
+The method to set the mailbox depends on its type.
+
+Mailbox in mbox format:
+If the mailbox uses the mbox format, we would use:
+mail_location = mbox:~/folder:INBOX=/var/mail/%u
+
+Where:
+- The mailbox type is mbox.
+- The location of each user's mailbox is ~/folder in their home directory. In POP connections, read messages are organized inside this folder (usually in a subfolder named INBOX). In IMAP connections, messages always remain on the server and are not downloaded.
+- The inbox is located at /var/mail/%u, which corresponds to /var/mail/username.
+
+Maildir-type mailboxes:
+If using maildir-type mailboxes, we would use:
+mail_location = maildir:~/Maildir
+
+=== Configuration
+
+The main configuration file for Dovecot is /etc/dovecot/dovecot.conf. 
+Additionally, 10-mail.conf and 10-auth.conf have been configured in this repository.
+
+Default Dovecot Configuration:
+Among the various Dovecot files and the default settings, we find these values:
+# enabled protocols
+protocols = "imap pop3"
+# Mailbox types and locations
+mail_location = mbox:~/mail:INBOX=/var/mail/%u
+# Authentication mechanisms.
+# Supports: plain, login, cram-md5, digest-md5, ntlm, ...
+auth_mechanisms = plain
+
+
+== Nginx
+
+
+== PHP
