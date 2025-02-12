@@ -1,33 +1,41 @@
 services:
-  app:
-    container_name: app
-    build:
-      context: ./php
-      dockerfile: Dockerfile
-    volumes:
-      - ./src:/var/www/html
-    working_dir: /var/www/html
-    networks:
-      - mail-network
-
   nginx:
     image: nginx:alpine
     container_name: nginx
-    ports:
-      - "80:80"
     volumes:
-      - ./src:/var/www/html
       - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
-    networks:
-      - mail-network
+      - ./squirrel/:/var/www/html
+    ports:
+      - "8080:80"
+    restart: unless-stopped
 
-  mail:
+  php:
     build:
-      context: mail
-    container_name: mail
-    networks:
-      - mail-network
+      context: ./php
+      dockerfile: Dockerfile
+    container_name: php
+    volumes:
+      - ./squirrel/:/var/www/html
 
-networks:
-  mail-network:
-    driver: bridge
+  postfix:
+    build:
+      context: ./postfix
+      dockerfile: Dockerfile
+    container_name: postfix
+    hostname: pumukydev.test
+    volumes:
+      - maildata:/home
+
+  dovecot:
+    build:
+      context: ./dovecot
+      dockerfile: Dockerfile
+    container_name: dovecot
+    hostname: pumukydev.test
+    volumes:
+      - maildata:/home
+    depends_on:
+      - postfix
+
+volumes:
+  maildata:
